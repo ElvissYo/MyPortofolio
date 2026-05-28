@@ -1,0 +1,162 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 217 69% 11%;
+    --foreground: 210 50% 90%;
+
+    --card: 217 60% 14%;
+    --card-foreground: 210 50% 90%;
+
+    --popover: 217 60% 14%;
+    --popover-foreground: 210 50% 90%;
+
+    --primary: 199 100% 50%;
+    --primary-foreground: 217 69% 8%;
+
+    --secondary: 217 50% 20%;
+    --secondary-foreground: 210 50% 90%;
+
+    --muted: 217 40% 18%;
+    --muted-foreground: 210 20% 55%;
+
+    --accent: 199 100% 50%;
+    --accent-foreground: 217 69% 8%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 217 40% 22%;
+    --input: 217 40% 22%;
+    --ring: 199 100% 50%;
+
+    --radius: 0.75rem;
+
+    /* Custom tokens */
+    --glow: 199 100% 50%;
+    --glow-secondary: 260 80% 60%;
+    --surface-glass: 217 60% 14%;
+    --neon-blue: 199 100% 50%;
+    --neon-purple: 260 80% 60%;
+    --midnight: 217 69% 11%;
+
+    --sidebar-background: 217 69% 8%;
+    --sidebar-foreground: 210 50% 90%;
+    --sidebar-primary: 199 100% 50%;
+    --sidebar-primary-foreground: 217 69% 8%;
+    --sidebar-accent: 217 50% 20%;
+    --sidebar-accent-foreground: 210 50% 90%;
+    --sidebar-border: 217 40% 22%;
+    --sidebar-ring: 199 100% 50%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans;
+    font-family: 'Inter', sans-serif;
+  }
+
+  code, .font-mono {
+    font-family: 'JetBrains Mono', monospace;
+  }
+}
+
+@layer components {
+  .glass-card {
+    @apply bg-card/40 backdrop-blur-xl border border-border/50 rounded-xl;
+    box-shadow: 0 0 0 1px hsl(var(--border) / 0.3);
+  }
+
+  .glass-card-hover {
+    @apply glass-card transition-all duration-500;
+  }
+
+  .glass-card-hover:hover {
+    border-color: hsl(var(--glow) / 0.5);
+    box-shadow: 0 0 20px hsl(var(--glow) / 0.15), 0 0 0 1px hsl(var(--glow) / 0.3);
+  }
+
+  .glow-text {
+    color: hsl(var(--primary));
+    text-shadow: 0 0 20px hsl(var(--glow) / 0.5), 0 0 40px hsl(var(--glow) / 0.2);
+  }
+
+  .glow-border {
+    border-color: hsl(var(--glow) / 0.5);
+    box-shadow: 0 0 15px hsl(var(--glow) / 0.2), inset 0 0 15px hsl(var(--glow) / 0.05);
+  }
+
+  .neon-pulse {
+    animation: neon-pulse 2s ease-in-out infinite;
+  }
+
+  .btn-primary-glow {
+    @apply bg-primary text-primary-foreground font-semibold px-6 py-3 rounded-lg transition-all duration-300;
+    box-shadow: 0 0 15px hsl(var(--glow) / 0.3);
+  }
+
+  .btn-primary-glow:hover {
+    box-shadow: 0 0 25px hsl(var(--glow) / 0.5), 0 0 50px hsl(var(--glow) / 0.2);
+    transform: translateY(-2px);
+  }
+
+  .btn-outline-glow {
+    @apply border border-primary/50 text-primary font-semibold px-6 py-3 rounded-lg transition-all duration-300 bg-transparent;
+  }
+
+  .btn-outline-glow:hover {
+    @apply bg-primary/10;
+    box-shadow: 0 0 20px hsl(var(--glow) / 0.2);
+    transform: translateY(-2px);
+  }
+
+  .section-heading {
+    @apply text-3xl md:text-4xl font-bold tracking-tight;
+  }
+
+  .magnetic-link {
+    @apply relative transition-all duration-300 cursor-pointer;
+  }
+
+  .magnetic-link:hover {
+    transform: scale(1.1);
+    filter: drop-shadow(0 0 8px hsl(var(--glow) / 0.5));
+  }
+}
+
+@keyframes neon-pulse {
+  0%, 100% {
+    box-shadow: 0 0 5px hsl(var(--glow) / 0.3), 0 0 15px hsl(var(--glow) / 0.2), 0 0 30px hsl(var(--glow) / 0.1);
+  }
+  50% {
+    box-shadow: 0 0 10px hsl(var(--glow) / 0.5), 0 0 25px hsl(var(--glow) / 0.3), 0 0 50px hsl(var(--glow) / 0.15);
+  }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: hsl(var(--background));
+}
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--border));
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--primary) / 0.5);
+}
+
+html {
+  scroll-behavior: smooth;
+}
