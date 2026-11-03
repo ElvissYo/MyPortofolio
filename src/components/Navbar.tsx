@@ -1,83 +1,72 @@
-import { useState, useEffect } from "react";
-import { Menu, X } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useState, useEffect, useRef } from "react";
+import { Menu, X, ArrowUpRight } from "lucide-react";
+import { motion, AnimatePresence, useScroll, useSpring } from "framer-motion";
 
 const navItems = [
-  { label: "About", href: "#about" },
-  { label: "Experience", href: "#experience" },
+  { label: "Work", href: "#experience" },
+  { label: "Internships", href: "#internships" },
   { label: "Projects", href: "#projects" },
+  { label: "Organizations", href: "#organizations" },
+  { label: "Volunteering", href: "#volunteering" },
+  { label: "About", href: "#about" },
   { label: "Skills", href: "#skills" },
-  { label: "Contact", href: "#contact" },
 ];
 
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [active, setActive] = useState("");
+  const toggleRef = useRef<HTMLButtonElement>(null);
+  const { scrollYProgress } = useScroll();
+  const scaleX = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 });
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 50);
-    window.addEventListener("scroll", onScroll);
-    return () => window.removeEventListener("scroll", onScroll);
+    let frame = 0;
+    const update = () => {
+      setScrolled(window.scrollY > 24);
+      const sections = Array.from(document.querySelectorAll<HTMLElement>("main section[id]"));
+      const passed = sections.filter(section => section.getBoundingClientRect().top <= 180);
+      const current = passed[passed.length - 1];
+      setActive(current ? `#${current.id}` : "");
+      frame = 0;
+    };
+    const onScroll = () => { if (!frame) frame = requestAnimationFrame(update); };
+    const onResize = () => { if (window.innerWidth >= 1280) setMobileOpen(false); };
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onResize);
+    return () => { window.removeEventListener("scroll", onScroll); window.removeEventListener("resize", onResize); cancelAnimationFrame(frame); };
   }, []);
 
+  useEffect(() => {
+    if (!mobileOpen) return;
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") { setMobileOpen(false); toggleRef.current?.focus(); }
+    };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [mobileOpen]);
+
   return (
-    <nav
-      className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${
-        scrolled ? "bg-background/80 backdrop-blur-lg border-b border-border/30" : ""
-      }`}
-    >
-      <div className="container mx-auto max-w-6xl flex items-center justify-between px-6 py-4">
-        <a href="#hero" className="text-primary font-bold font-mono text-lg">
-          {"<YES />"}
-        </a>
-
-        {/* Desktop */}
-        <div className="hidden md:flex items-center gap-8">
-          {navItems.map((item) => (
-            <a
-              key={item.label}
-              href={item.href}
-              className="text-muted-foreground hover:text-primary text-sm font-medium transition-colors duration-300"
-            >
-              {item.label}
-            </a>
-          ))}
-        </div>
-
-        {/* Mobile toggle */}
-        <button
-          className="md:hidden text-foreground"
-          onClick={() => setMobileOpen(!mobileOpen)}
-        >
-          {mobileOpen ? <X size={24} /> : <Menu size={24} />}
-        </button>
-      </div>
-
-      {/* Mobile menu */}
-      <AnimatePresence>
-        {mobileOpen && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            className="md:hidden bg-background/95 backdrop-blur-lg border-b border-border/30 overflow-hidden"
-          >
-            <div className="flex flex-col gap-2 px-6 py-4">
-              {navItems.map((item) => (
-                <a
-                  key={item.label}
-                  href={item.href}
-                  onClick={() => setMobileOpen(false)}
-                  className="text-muted-foreground hover:text-primary py-2 text-sm font-medium transition-colors"
-                >
-                  {item.label}
-                </a>
-              ))}
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </nav>
+    <>
+      <a className="skip-link" href="#main-content">Skip to content</a>
+      <header className={`site-header ${scrolled || mobileOpen ? "is-scrolled" : ""}`}>
+        <nav aria-label="Main navigation" className="section-container nav-inner">
+          <a href="#hero" aria-label="Yose Elvis Saputra, home" className="brand" onClick={() => setMobileOpen(false)}>yose<span>.</span><span className="brand-caption">PORTFOLIO</span></a>
+          <div className="hidden xl:flex items-center gap-1">
+            {navItems.map(item => <a key={item.href} href={item.href} aria-current={active === item.href ? "location" : undefined} className={`nav-link ${active === item.href ? "is-active" : ""}`}>{item.label}</a>)}
+          </div>
+          <a href="#contact" className="nav-contact hidden xl:inline-flex">Let's talk <ArrowUpRight size={16} /></a>
+          <button ref={toggleRef} className="menu-toggle xl:hidden" onClick={() => setMobileOpen(!mobileOpen)} aria-label={mobileOpen ? "Close navigation" : "Open navigation"} aria-expanded={mobileOpen} aria-controls="mobile-navigation">{mobileOpen ? <X size={22} /> : <Menu size={22} />}</button>
+        </nav>
+        <AnimatePresence>
+          {mobileOpen && <motion.nav id="mobile-navigation" aria-label="Mobile navigation" initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.25 }} className="mobile-navigation xl:hidden">
+            {[...navItems, { label: "Contact", href: "#contact" }].map((item, index) => <a key={item.href} href={item.href} onClick={() => setMobileOpen(false)} aria-current={active === item.href ? "location" : undefined}><span className="font-mono text-primary text-xs">0{index + 1}</span>{item.label}<ArrowUpRight size={17} /></a>)}
+          </motion.nav>}
+        </AnimatePresence>
+        <motion.div className="scroll-progress" style={{ scaleX }} aria-hidden="true" />
+      </header>
+    </>
   );
 };
 

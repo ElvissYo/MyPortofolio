@@ -1,5 +1,4 @@
-import { useEffect, useRef } from "react";
-import { motion, useInView } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 
 interface RevealProps {
   children: React.ReactNode;
@@ -8,16 +7,14 @@ interface RevealProps {
 }
 
 const RevealOnScroll = ({ children, className = "", delay = 0 }: RevealProps) => {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-80px" });
-
+  const reducedMotion = useReducedMotion();
   return (
     <motion.div
-      ref={ref}
       className={className}
-      initial={{ opacity: 0, y: 40 }}
-      animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
-      transition={{ duration: 0.6, delay, ease: "easeOut" }}
+      initial={reducedMotion ? false : { opacity: 0, y: 24 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.08 }}
+      transition={{ duration: 0.65, delay: Math.min(delay, 0.24), ease: [0.22, 1, 0.36, 1] }}
     >
       {children}
     </motion.div>

@@ -1,48 +1,31 @@
-import { Award, Database, BarChart3 } from "lucide-react";
+import { Award, ArrowUpRight, Database, BrainCircuit, ChartNoAxesCombined } from "lucide-react";
 import RevealOnScroll from "./RevealOnScroll";
+import SectionHeading from "./SectionHeading";
 
-const AboutSection = () => {
-  return (
-    <section id="about" className="relative py-24 px-6">
-      <div className="container mx-auto max-w-4xl">
-        <RevealOnScroll>
-          <h2 className="section-heading glow-text text-center mb-12">About Me</h2>
+const specialties = [
+  { icon: Database, title: "Engineer the foundation", description: "Reliable pipelines, structured warehouses, and data that is ready to work." },
+  { icon: BrainCircuit, title: "Find the intelligence", description: "Predictive models that turn complex patterns into practical decisions." },
+  { icon: ChartNoAxesCombined, title: "Make it meaningful", description: "Clear analytics that connect technical work to business impact." },
+];
+
+const AboutSection = () => (
+  <section id="about" className="portfolio-section">
+    <div className="section-container">
+      <SectionHeading number="06" eyebrow="THE PERSON BEHIND THE DATA" title="About & Education" description="Information Systems, Data Science, and a drive to turn technical work into practical outcomes." />
+      <div className="about-grid">
+        <RevealOnScroll className="about-story">
+          <p>I bridge the gap between <span>complex raw data</span> and <span>strategic business intelligence.</span></p>
+          <p>I'm an Information Systems undergraduate specializing in Data Science at President University, with experience in analytics, data engineering, machine learning, and application development.</p>
+          <p>At Insta360 Indonesia, I built an internal order system to centralize product and order workflows. My projects span pipelines, dashboards, and predictive models, including a national Top 10 result at DSCO BINUS.</p>
+          <div className="education-details"><strong>President University</strong><span>B.Sc. Information Systems · Data Science Concentration</span><span>Cikarang, Indonesia · Expected graduation 2027</span><span className="text-primary">GPA 3.81 / 4.00</span></div>
+          <div className="scholarship"><Award size={22} /><div><strong>Jababeka Scholarship Awardee</strong><span>Learning with purpose. Building with ambition.</span></div><ArrowUpRight size={18} /></div>
         </RevealOnScroll>
-
-        <RevealOnScroll delay={0.1}>
-          <div className="glass-card-hover p-8 md:p-10">
-            <p className="text-foreground/90 text-lg leading-relaxed mb-6">
-              A data-driven enthusiast specializing in{" "}
-              <span className="text-primary font-semibold">Data Science</span> and{" "}
-              <span className="text-primary font-semibold">Data Engineering</span>.
-              I bridge the gap between complex raw data and strategic business intelligence.
-              With a strong foundation in{" "}
-              <span className="text-primary font-semibold">Python</span>,{" "}
-              <span className="text-primary font-semibold">SQL</span>, and{" "}
-              <span className="text-primary font-semibold">Machine Learning</span>,
-              I focus on building scalable data pipelines and predictive models that drive impact.
-              Jababeka Scholarship Awardee and a lifelong learner in the evolving AI landscape.
-            </p>
-
-            <div className="flex flex-wrap gap-4 mt-6">
-              <div className="flex items-center gap-2 text-primary font-mono text-sm px-4 py-2 rounded-lg bg-primary/5 border border-primary/20">
-                <Award size={16} />
-                Jababeka Scholarship Awardee
-              </div>
-              <div className="flex items-center gap-2 text-primary font-mono text-sm px-4 py-2 rounded-lg bg-primary/5 border border-primary/20">
-                <Database size={16} />
-                Data Engineering
-              </div>
-              <div className="flex items-center gap-2 text-primary font-mono text-sm px-4 py-2 rounded-lg bg-primary/5 border border-primary/20">
-                <BarChart3 size={16} />
-                Data Science
-              </div>
-            </div>
-          </div>
-        </RevealOnScroll>
+        <div className="specialty-list">
+          {specialties.map((item, index) => <RevealOnScroll key={item.title} delay={index * 0.08}><div className="specialty-card glass-card-hover"><span className="specialty-icon"><item.icon size={22} /></span><div><h3>{item.title}</h3><p>{item.description}</p></div><span className="specialty-number">0{index + 1}</span></div></RevealOnScroll>)}
+        </div>
       </div>
-    </section>
-  );
-};
+    </div>
+  </section>
+);
 
 export default AboutSection;
