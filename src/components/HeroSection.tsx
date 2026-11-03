@@ -40,7 +40,7 @@ const HeroSection = () => {
           <div className="orbit orbit-outer" aria-hidden="true"><i /></div>
           <div className="orbit orbit-inner" aria-hidden="true"><i /></div>
           <div className="portrait-frame">
-            <img src="/yose_face.png?v=2" alt="Yose Elvis Saputra" width="400" height="400" fetchPriority="high" />
+            <img src="/yose_face.png" alt="Yose Elvis Saputra" width="400" height="400" fetchPriority="high" />
           </div>
           <div className="floating-label label-engineering"><span className="label-icon"><Database size={19} /></span><div><span className="label-caption">BUILDING WITH PURPOSE</span><strong>Data Engineering</strong></div></div>
           <div className="floating-label label-science"><span className="label-icon"><Sparkles size={19} /></span><div><span className="label-caption">DRIVEN BY CURIOSITY</span><strong>Machine Learning</strong></div><span className="status-dot" /></div>
